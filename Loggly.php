@@ -97,45 +97,52 @@ class Loggly {
     }
 
     public function getInputs() {
-        return $this->makeRequest('/api/inputs');
+        return $this->makeRequest('/apiv2/inputs');
     }
 
     public function getDevices() {
-        return $this->makeRequest('/api/devices');
+        return $this->makeRequest('/apiv2/devices');
     }
 
     # input-related methods
 
     public function addDevice($inputId) {
-        return $this->makeRequest('/api/inputs/' . $inputId . '/adddevice', null, 'POST');
+        return $this->makeRequest('/apiv2/inputs/' . $inputId . '/adddevice', null, 'POST');
     }
 
     public function removeDevice($inputId) {
-        return $this->makeRequest('/api/inputs/' . $inputId . '/removedevice', null, 'POST');
+        return $this->makeRequest('/apiv2/inputs/' . $inputId . '/removedevice', null, 'POST');
     }
 
     public function enableDiscovery($inputId) {
-        return $this->makeRequest('/api/inputs/' . $inputId . '/discover', null, 'POST');
+        return $this->makeRequest('/apiv2/inputs/' . $inputId . '/discover', null, 'POST');
     }
 
     public function disableDiscovery($inputId) {
-        return $this->makeRequest('/api/inputs/' . $inputId . '/discover', null, 'DELETE');
+        return $this->makeRequest('/apiv2/inputs/' . $inputId . '/discover', null, 'DELETE');
     }
 
     # search-related methods
 
     public function search($q, $params = null) {
         $params['q'] = $q;
-        return $this->makeRequest('/api/search', $params);
+        return $this->makeRequest('/apiv2/search', $params);
+    }
+
+    public function events($rsid, $page=0) {
+        return $this->makeRequest('/apiv2/events', array(
+            "rsid" => $rsid,
+            "page" => $page,
+        ));
     }
 
     public function facet($q, $facet = 'date', $params = null) {
         $params['q'] = $q;
-        return $this->makeRequest('/api/facets/' . $facet, $params);
+        return $this->makeRequest('/apiv2/facets/' . $facet, $params);
     }
 
     public function getSavedSearches() {
-        return $this->makeRequest('/api/savedsearches/');
+        return $this->makeRequest('/apiv2/savedsearches/');
     }
 
     # $params is an array with keys 'foo' and 'context'
@@ -143,23 +150,23 @@ class Loggly {
     # $params = array('name' => 'foo',
     #                 'context' => '{"search_type":"search", "terms":"error AND 500", "from":"NOW-1HOUR", "until":"NOW", "inputs":["app","staging"]}');
     public function createSavedSearch($params) {
-        return $this->makeRequest('/api/savedsearches', $params, 'POST');
+        return $this->makeRequest('/apiv2/savedsearches', $params, 'POST');
     }
 
     # $params must contain a key 'id'
     public function updateSavedSearch($params) {
-        return $this->makeRequest('/api/savedsearches', $params, 'PUT');
+        return $this->makeRequest('/apiv2/savedsearches', $params, 'PUT');
     }
 
     public function deleteSavedSearch($id) {
-        return $this->makeRequest('/api/savedsearches/' . $id, null, 'DELETE');
+        return $this->makeRequest('/apiv2/savedsearches/' . $id, null, 'DELETE');
     }
 
     public function runSavedSearch($id, $facet = false, $facetBy = 'date') {
         if (!$facet) {
-            return $this->makeRequest('/api/savedsearches/' . $id . '/results');
+            return $this->makeRequest('/apiv2/savedsearches/' . $id . '/results');
         } else {
-            return $this->makeRequest('/api/savedsearches/' . $id . '/facets/' . $facetBy);
+            return $this->makeRequest('/apiv2/savedsearches/' . $id . '/facets/' . $facetBy);
         }
     }
 
@@ -168,12 +175,12 @@ class Loggly {
 
     # always returns current Loggly account
     public function getCustomer() {
-        return $this->makeRequest('/api/customers/');
+        return $this->makeRequest('/apiv2/customers/');
     }
 
     # always returns current Loggly account
     public function getCustomerStats() {
-        return $this->makeRequest('/api/customers/stats');
+        return $this->makeRequest('/apiv2/customers/stats');
     }
 }
 
