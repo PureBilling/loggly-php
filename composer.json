@@ -1,5 +1,5 @@
 {
-    "name": "loggly/loggly-php",
+    "name": "purebilling/loggly-php",
     "description": "Loggly SDK for PHP",
     "autoload": {
         "classmap": ["Loggly.php"]
